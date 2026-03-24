@@ -22,10 +22,13 @@ const Timeline: React.FC = () => {
 	const [isReady, setIsReady] = useState(false) // расчет размеров для радиуса круга
 	const [isMobile, setIsMobile] = useState(window.innerWidth <= 576)
 
+	const [enableAnimation, setEnableAnimation] = useState(false)
+
 	/* --- refs --- */
 	const circleRef = useRef<HTMLDivElement>(null) 
 	const swiperRef = useRef<SwiperType | null>(null)
 	const resizeTimeout = useRef<number | null>(null)
+	const isFirstRender = useRef(true)
 
 	/* --- data --- */
 	const pointCount = timelineData.length
@@ -40,6 +43,15 @@ const Timeline: React.FC = () => {
 	// флаги для кнопок под кругом
 	const isFirst = activeIndex === 0
 	const isLast = activeIndex === pointCount - 1
+
+	useEffect(() => {
+		if(isReady) {
+			const id = requestAnimationFrame(() => {
+				setEnableAnimation(true)
+			})
+			return () => cancelAnimationFrame(id)
+		}
+	}, [isReady])
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -91,9 +103,9 @@ const Timeline: React.FC = () => {
 	useLayoutEffect(() => {
 		if(!circleRef.current || !isReady) return
 
-		// первый рендер - без анимки
-		if(!isMounted) {
-			setIsMounted(true)
+		// первый рендер
+		if(isFirstRender.current) {
+			isFirstRender.current = false
 			return
 		}
 
@@ -224,7 +236,7 @@ const Timeline: React.FC = () => {
 							ref={circleRef}
 							style={{ 
 								transform: isReady ? `rotate(${rotation}deg)` : 'none',
-								transition: isMounted  ? 'transform 1.5s' : 'none', 
+								transition: enableAnimation ? 'transform 1.5s' : 'none', 
 								opacity: isReady ? 1 : 0
 							}}
 						>
