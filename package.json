@@ -4,17 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --open",
-    "build": "webpack",
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production",
     "deploy": "gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "swiper": "^12.1.2"
   },
   "devDependencies": {
@@ -25,8 +24,10 @@
     "@types/react-dom": "^19.2.3",
     "babel-loader": "^10.1.1",
     "css-loader": "^7.1.4",
+    "css-minimizer-webpack-plugin": "^8.0.0",
     "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.6.6",
+    "mini-css-extract-plugin": "^2.10.1",
     "sass": "^1.98.0",
     "sass-loader": "^16.0.7",
     "style-loader": "^4.0.0",
